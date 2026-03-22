@@ -114,7 +114,8 @@ int main(int argc,char*argv[]){
             		}
             		if(do_fsync){
                 		if(fsync(fd)<0){
-                    			perror("fsync"); exit(1);
+                    			perror("fsync");
+					exit(1);
                 		}
           		}
        		}
