@@ -9,7 +9,7 @@
 
 #define ALIGNMENT 4096
 
-inline double now_sec() {
+static inline double now_sec() {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return ts.tv_sec + ts.tv_nsec * 1e-9;
