@@ -32,5 +32,13 @@ Writing data to the disk goes throw the follwing I/O data path:
 | `O_SYNC flag in write()`   | UB → KPC → Disk |
 
 
+O_DIRECT vs O_SYNC in write():
+| Feature            | O_SYNC          | O_DIRECT  |
+| ------------------ | --------------- | --------- |
+| Uses page cache    | ✔               | ✖         |
+| Requires alignment | ✖               | ✔         |
+| Write path         | UB → KPC → Disk | UB → Disk |
+
+
 
 
