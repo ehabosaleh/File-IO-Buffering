@@ -1,7 +1,7 @@
 #include"../include/fileio.h"
 
 void usage(char *prog){
-	printf("Usage: %s [--mode=Mode] [--file=] [--size_bytes=n] [--iters=N]\n", prog);
+	printf("Usage: %s [--mode=Mode] [--file=] [--size-bytes=n] [--iters=N]\n", prog);
     	printf("Modes:\n");
     	printf("  write: Moving data from UB to  KPC\n");
     	printf("  write_fsync: Moving data from UB to KPC to Disk\n");
@@ -13,13 +13,26 @@ void usage(char *prog){
 }
 
 int main(int argc,char*argv[]){
-	if (argc<5)
-		usage(argv[0]);
-	
-	char *mode = malloc(256);
-    	char *filename = malloc(256);
+	char *mode=NULL;
+	mode="write";
+    	char *filename=NULL;
+	filename="testfile.bin";
     	size_t size=4096;
     	int iters=1000;
+
+	for(int i=1;i<argc;i++) {
+        	if(strncmp(argv[i], "--mode=", 7) == 0) mode=argv[i] + 7;
+        else if (strncmp(argv[i], "--file=", 7) == 0) filename=argv[i] + 7;
+        else if (strncmp(argv[i], "--size-bytes", 13) == 0) size=atoi(argv[i] + 13);
+        else if (strncmp(argv[i], "--iters=", 9) == 0) iters= atoi(argv[i] + 9);
+        else if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
+             usage(argv[0]);
+        }
+	else{
+             fprintf(stderr, "Unknown arg: %s\n", argv[i]);
+             usage(argv[0]);
+         }
+     	}
 
     	int flags = O_CREAT | O_WRONLY | O_TRUNC;
     	int use_stdio = 0;
@@ -117,11 +130,15 @@ int main(int argc,char*argv[]){
     	printf("Iterations: %d\n", iters);
     	printf("Avg latency: %.3f us\n", avg_us);
 
-    if(use_stdio)
-	fclose(fp);
-    else 
-	close(fd);
-
-    free(buf);
-    return 0;
+    	if(use_stdio)
+		fclose(fp);
+    	else 
+		close(fd);
+	
+    	if (unlink(filename) == -1) {
+        	perror("unlink");
+        	return 1;
+    	}
+	free(buf);
+    	return 0;
 }
