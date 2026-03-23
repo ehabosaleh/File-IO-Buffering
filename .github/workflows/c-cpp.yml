@@ -14,4 +14,15 @@ jobs:
       - uses: actions/checkout@v4
       - run: cmake -S . -B build
       - run: cmake --build build
-      - run: ./bin/fileio --mode=write_fsync --size-bytes=4096
+      - name: write - Moving data from UB to  KPC
+        run: ./bin/fileio --mode=write --size-bytes=4096
+      - name: write_fsync Moving data from UB to KPC to Disk
+        run: ./bin/fileio --mode=write_fsync --size-bytes=4096
+      - name: stdio Moving data from UB to SB to KPC
+        run: ./bin/fileio --mode=stdio --size-bytes=4096
+      - name: stdio_fsync Moving data from UB to SB to KPC to Disk
+        run: ./bin/fileio --mode=stdio_fsync --size-bytes=4096
+      - name: osync Moving data from UB to SB to KPC to Disk
+        run: ./bin/fileio --mode=osync --size-bytes=4096
+      - name: odirect Moving data from UB to Disk
+        run: ./bin/fileio --mode=odirect --size-bytes=4096
