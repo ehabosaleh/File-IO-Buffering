@@ -40,5 +40,28 @@ O_DIRECT vs O_SYNC in write():
 | Write path         | UB → KPC → Disk | UB → Disk |
 
 
+Create a build directory and run CMake:
+
+```bash
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+After compilation the executable will be located at: `bin/fileio`. Examples: 
+```
+./fileio --mode=write --size-bytes=1048576
+
+./fileio --mode=write_fsync --size-bytes=1048576
+
+./fileio --mode=stdio --size-bytes=1048576
+
+./bin/fileio --mode=stdio_fsync --size-bytes=1048576
+
+./fileio --mode=osync --size-bytes=1048576
+
+.fileio --mode=odirect --size-bytes=1048576
+
+```
 
 
